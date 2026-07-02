@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบทำข้อสอบประจำปี</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ============================================================
+     ตั้งค่าสี/ธีมของเว็บที่นี่ — เปลี่ยนได้ตามใจ
+     ============================================================ */
+  :root {
+    --navy: #16233F;
+    --navy-light: #223357;
+    --teal: #0F766E;
+    --teal-light: #E6F4F2;
+    --amber: #D97706;
+    --bg: #F6F5F1;
+    --card-bg: #FFFFFF;
+    --text-primary: #1A1A18;
+    --text-secondary: #5C5B56;
+    --border: #E4E2DA;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sarabun', 'Noto Sans Thai', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  /* ---------- ส่วนหัว (Header) ---------- */
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 3rem 1.5rem 3.5rem;
+    text-align: center;
+    background-image: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%);
+  }
+
+  header .eyebrow {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9FB0CC;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  header p {
+    color: #C7D0E0;
+    font-size: 1rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ---------- เนื้อหาหลัก ---------- */
+  main {
+    max-width: 880px;
+    margin: -2rem auto 0;
+    padding: 0 1.5rem 3rem;
+  }
+
+  .notice {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--amber);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    box-shadow: 0 4px 16px rgba(22,35,63,0.06);
+  }
+
+  .notice strong { color: var(--text-primary); }
+
+  .section-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin: 2rem 0 1rem;
+    padding-left: 0.25rem;
+  }
+
+  /* ---------- การ์ดแผนก (แก้ไข/เพิ่มได้ในส่วน HTML ด้านล่าง) ---------- */
+  .dept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .dept-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .dept-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(22,35,63,0.10);
+  }
+
+  .dept-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--teal-light);
+    color: var(--teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .dept-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .dept-card .meta {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .dept-card a.btn {
+    margin-top: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: background 0.15s ease;
+  }
+
+  .dept-card a.btn:hover { background: var(--navy-light); }
+
+  footer {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 480px) {
+    header h1 { font-size: 1.5rem; }
+    main { margin-top: -1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">การประเมินผลประจำปี 2569 · ฝ่าย PRODUCTION</div>
+  <h1>ระบบทำข้อสอบพนักงานฝ่ายผลิต</h1>
+  <p>เลือกไลน์ที่ท่านปฏิบัติงานด้านล่าง แล้วกดปุ่มเพื่อเริ่มทำแบบทดสอบผ่าน Google Form</p>
+</header>
+
+<main>
+
+  <div class="notice">
+    <strong>คำชี้แจง:</strong> กรุณาทำแบบทดสอบให้เสร็จภายในวันที่กำหนด และทำเพียงครั้งเดียวต่อคน
+    หากมีปัญหาการเข้าถึงแบบฟอร์ม ติดต่อหัวหน้างานฝ่ายผลิต
+  </div>
+
+  <div class="section-label">เลือกไลน์ของท่าน</div>
+
+  <!-- ============================================================
+       ส่วนนี้คือรายการแผนก — เพิ่ม/ลบ/แก้ไขได้ตรงนี้
+       1. เปลี่ยนชื่อแผนกใน <h3>
+       2. เปลี่ยนลิงก์ Google Form ใน href="..."
+       3. คัดลอก .dept-card ทั้งก้อนเพื่อเพิ่มแผนกใหม่
+       ============================================================ -->
+  <div class="dept-grid">
+
+    <div class="dept-card">
+      <div class="dept-icon">SL</div>
+      <h3>SLITTER</h3>
+      <div class="meta">ข้อสอบประเมินความรู้ประจำไลน์ SLITTER</div>
+      <a class="btn" href="https://docs.google.com/forms/d/1wOubYaYyPjpkvLpJsgXEm9WzKrnFzGXBwI41DP5iZNI/viewform" target="_blank" rel="noopener">เริ่มทำข้อสอบ →</a>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-icon">BL</div>
+      <h3>BIG LEVELLER</h3>
+      <div class="meta">ข้อสอบประเมินความรู้ประจำไลน์ BIG LEVELLER</div>
+      <a class="btn" href="https://docs.google.com/forms/d/1B4ONOfawaB7Hl5JcDu7UcCMaDmBVfjpC7ccMr9G3ti4/viewform" target="_blank" rel="noopener">เริ่มทำข้อสอบ →</a>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-icon">ML</div>
+      <h3>MINI LEVELLER</h3>
+      <div class="meta">ข้อสอบประเมินความรู้ประจำไลน์ MINI LEVELLER</div>
+      <a class="btn" href="https://docs.google.com/forms/d/1sA2sOCRy3SjRfnv7YpVdb_SX1FYH8i2M5yTwr8Ez5VQ/viewform" target="_blank" rel="noopener">เริ่มทำข้อสอบ →</a>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-icon">RM</div>
+      <h3>RS&amp;MP2</h3>
+      <div class="meta">ข้อสอบประเมินความรู้ประจำไลน์ RS&amp;MP2</div>
+      <a class="btn" href="https://docs.google.com/forms/d/1UaBYGX_tF_RWsmd2h0aHOQqtmqM5FaZ4hYZDG02L9fA/viewform" target="_blank" rel="noopener">เริ่มทำข้อสอบ →</a>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-icon">WS</div>
+      <h3>WOOD SHOP</h3>
+      <div class="meta">ข้อสอบประเมินความรู้ประจำไลน์ WOOD SHOP</div>
+      <a class="btn" href="https://docs.google.com/forms/d/1Abk0yFp9ZeVnsFMEfW3hlRYNed0LOJQ8V-A84NXdBgc/viewform" target="_blank" rel="noopener">เริ่มทำข้อสอบ →</a>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-icon">MH</div>
+      <h3>MHL</h3>
+      <div class="meta">ข้อสอบประเมินความรู้ประจำหน่วยงาน MHL</div>
+      <a class="btn" href="https://docs.google.com/forms/d/1azIFgVsw9DM7tXoTjTp4jn-vM9hR2a2HI8K6hzy2rhs/viewform" target="_blank" rel="noopener">เริ่มทำข้อสอบ →</a>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-icon">WH</div>
+      <h3>W/H</h3>
+      <div class="meta">ข้อสอบประเมินความรู้ประจำไลน์ W/H</div>
+      <a class="btn" href="https://docs.google.com/forms/d/1dXtkU4FMPzJFxyaXJMLGg6PA8FlVg0IW01Mz0z5Bh2M/viewform" target="_blank" rel="noopener">เริ่มทำข้อสอบ →</a>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  จัดทำโดยฝ่าย PRODUCTION · สอบถามเพิ่มเติมติดต่อ 3554
+</footer>
+
+</body>
+</html>
