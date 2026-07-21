@@ -923,7 +923,14 @@ let lineOrder = [];
 let lineColors = {};
 const PALETTE = ["#7A1C1C","#C97A1B","#4A5560","#2F7A4D","#8A5A44","#2A5C8A","#6C4A8A","#B8557A","#3E8E8E","#8A7A2F"];
 
-let state = { line: "all", shift: "all", search: "", dateFrom: "", dateTo: "", sortKey: "date", sortDir: "desc", threshold: 70 };
+// ไลน์ที่ไม่ต้องการให้แสดงเป็นตัวกรอง (ข้อมูลผิดพลาด/ไม่ใช่ไลน์จริง)
+const EXCLUDED_LINES = ["A"];
+// ไลน์ที่ต้องการให้แสดงเป็นตัวกรองเสมอ แม้ยังไม่มีข้อมูลผลสอบ
+const FORCE_INCLUDE_LINES = ["MP2"];
+// กะที่รับอนุญาตให้แสดงเป็นตัวกรอง (ตัดกะอื่นออก)
+const VALID_SHIFTS = ["A", "B"];
+
+let state = { line: "all", shift: "all", search: "", dateFrom: "", dateTo: "", sortKey: "date", sortDir: "desc", threshold: 80 };
 
 /* ---------- Normalize rows returned by the Apps Script Web App ---------- */
 /* Each row from the API looks like:
@@ -965,11 +972,14 @@ function normalizeRows(rawRows) {
 }
 
 function buildData(rawData) {
-  data = rawData.map(r => ({
-    date: r[0], score: r[1], total: r[2], name: r[3], id: r[4], line: r[5], shift: r[6],
-    pct: Math.round((r[1]/r[2])*1000)/10
-  }));
-  lineOrder = [...new Set(data.map(d => d.line))].sort();
+  data = rawData
+    .map(r => ({
+      date: r[0], score: r[1], total: r[2], name: r[3], id: r[4], line: r[5], shift: r[6],
+      pct: Math.round((r[1]/r[2])*1000)/10
+    }))
+    .filter(d => !EXCLUDED_LINES.includes(d.line) && VALID_SHIFTS.includes(d.shift));
+
+  lineOrder = [...new Set([...data.map(d => d.line), ...FORCE_INCLUDE_LINES])].sort();
   lineColors = {};
   lineOrder.forEach((l, i) => { lineColors[l] = PALETTE[i % PALETTE.length]; });
 }
@@ -1112,7 +1122,7 @@ function renderChips() {
   document.getElementById('lineChips').innerHTML = lines.map(l =>
     `<button class="chip ${state.line===l?'active':''}" data-line="${l}">${l==='all'?'ทั้งหมด':l}</button>`
   ).join('');
-  const shifts = ["all", ...[...new Set(data.map(d => d.shift))].sort()];
+  const shifts = ["all", ...VALID_SHIFTS];
   document.getElementById('shiftChips').innerHTML = shifts.map(s =>
     `<button class="chip ${state.shift===s?'active':''}" data-shift="${s}">${s==='all'?'ทั้งหมด':'กะ '+s}</button>`
   ).join('');
@@ -1136,7 +1146,7 @@ function renderCharts() {
   const lineLabels = lineOrder.filter(l => byLine[l].length);
   const lineAvgs = lineLabels.map(l => Math.round((byLine[l].reduce((a,b)=>a+b,0)/byLine[l].length)*10)/10);
 
-  const shiftsAll = [...new Set(data.map(d => d.shift))].sort();
+  const shiftsAll = VALID_SHIFTS;
   const byShift = {};
   shiftsAll.forEach(s => byShift[s] = []);
   fd.forEach(d => { if (byShift[d.shift]) byShift[d.shift].push(d.pct); });
