@@ -1033,15 +1033,25 @@ async function fetchLiveData() {
   refreshBtn.disabled = true;
   fallbackNote.classList.remove('show');
 
-  try {
+    try {
+    console.log("🚀 Starting fetch from:", APPS_SCRIPT_URL);
+    
     const json = await loadJSONP(APPS_SCRIPT_URL);
+    console.log("✅ Received raw data:", json.length, "rows");
+    if (json.length > 0) console.log("First row sample:", json[0]);
+
     const normalized = normalizeRows(json);
-    if (!normalized.length) throw new Error("no rows parsed");
+    console.log("✅ Normalized rows:", normalized.length);
+    if (normalized.length > 0) console.log("First normalized sample:", normalized[0]);
+
+    if (!normalized.length) throw new Error("no rows parsed after normalize");
+    
     buildData(normalized);
     dot.className = 'sync-dot';
     const now = new Date();
     text.textContent = 'ข้อมูลสด · อัปเดตล่าสุด ' + now.toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
   } catch (err) {
+    console.error("❌ Fetch Error:", err);
     buildData(fallbackRawData);
     dot.className = 'sync-dot error';
     text.textContent = 'ใช้ข้อมูลสำรอง (โหลดข้อมูลสดไม่สำเร็จ)';
@@ -1052,6 +1062,7 @@ async function fetchLiveData() {
     document.getElementById('dashboardContent').style.display = 'block';
     setupDateInputs();
     renderAll();
+  }
   }
 }
 
